@@ -9,7 +9,7 @@ dotenv.config();
 
 app.use(express.json());
 
-MONGO_URL = 'mongodb://localhost:27017/mongo-golang'
+MONGO_URL = 'mongodb://localhost:27017/map'
 
 mongoose.connect(MONGO_URL, {
         useNewUrlParser: true,
@@ -22,6 +22,6 @@ mongoose.connect(MONGO_URL, {
 app.use("/api/users", userRoute);
 app.use("/api/pins", pinRoute);
 
-app.listen(8800, () => {
+app.listen(4500, () => {
   console.log("Backend server is running!");
 });

@@ -20,7 +20,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "react-scripts start"
+    "dev": "react-scripts start"
   },
   "author": "",
   "license": "ISC",
@@ -37,5 +37,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8800/api"
+  "proxy": "http://localhost:4500/api"
 }
