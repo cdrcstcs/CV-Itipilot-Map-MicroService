@@ -29,7 +29,6 @@ label {
 .date {
   font-size: 12px;
 }
-
 form {
   width: 250px;
   height: 250px;
@@ -55,7 +54,6 @@ textarea:focus,
 select:focus {
   outline: none;
 }
-
 textarea {
   border: none;
   border-bottom: 1px solid gray;
