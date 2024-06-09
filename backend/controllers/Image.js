@@ -9,7 +9,7 @@ async function uploadImage(req, res) {
             image : req.file.filename
         });
         await image.save();
-        res.json({ image });
+        res.json( image );
     } catch (error) {
         console.error('Error saving image to MongoDB:', error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -61,9 +61,8 @@ function App() {
   useEffect(() => {
     const fetchAttractions = async () => {
       try {
-        // Fetch attractions from your backend API
         const allAttractions = await axios.get("http://localhost:4500/map_a");
-        setAttractions(allAttractions.data); // Update attractions state with the response data
+        setAttractions(allAttractions.data); 
       } catch (err) {
         console.log(err);
       }
@@ -113,7 +112,7 @@ function App() {
               anchor="left"
             >
                 <AttractionPage
-                  attractionId={currentAttractionId}
+                  attraction={attraction}
                 ></AttractionPage>
               </Popup>
             )}

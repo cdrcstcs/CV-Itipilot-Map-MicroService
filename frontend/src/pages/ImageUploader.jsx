@@ -22,10 +22,15 @@ export const ImageUploader = ({ onImageUpload }) => {
         const formData = new FormData();
         formData.append('file', selectedFile);
         console.log(selectedFile);
+        console.log(formData);
+        if (!formData.get('file')) {
+            console.error('File in FormData is null.');
+            return;
+        }
         try {
             const response = await axios.post('http://localhost:4500/map_u', formData);
-            if (response.data && response.data.image._id) {
-                onImageUpload(response.data.image._id);
+            if (response.data && response.data._id) {
+                onImageUpload(response.data._id);
             }
         } catch (error) {
             console.error('Error uploading image: ', error);

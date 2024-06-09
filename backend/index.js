@@ -11,7 +11,6 @@ import path from "path";
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.json());
 const MONGO_URL = 'mongodb://localhost:27017/mongo-golang';
 mongoose.connect(MONGO_URL)   
  .then(() => console.log("MongoDB connected!"))

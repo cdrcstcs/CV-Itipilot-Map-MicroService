@@ -1,22 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import TagPage from './TagPage';
 import { SingleImage } from './ImagePage';
 import RatingPage from './RatingPage';
-const AttractionPage = ({ attractionId }) => {
-  const [attraction, setAttraction] = useState(null);
-
-  useEffect(() => {
-    const fetchAttraction = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4500/map_a/${attractionId}`);
-        setAttraction(response.data);
-      } catch (error) {
-        console.error('Error fetching attraction:', error);
-      }
-    };
-    fetchAttraction();
-  }, [attractionId]);
+const AttractionPage = ({ attraction }) => {
   return (
     <div>
       {attraction.imageId && <SingleImage imageId={attraction.imageId}></SingleImage>}

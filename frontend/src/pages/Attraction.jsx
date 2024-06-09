@@ -31,6 +31,7 @@ const CreateAttractionPage = ({x, y }) => {
 
   const handleImageUpload = (imageId) => {
     setImageId(imageId); // Set the imageId state with the received image ID
+    console.log(imageId);
   };
 
   const handleTag = (tagId) => {
