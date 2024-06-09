@@ -45,7 +45,7 @@ function App() {
     }));
   }, [lat_cur, long_cur]);
 
-  const handleMarkerClick = (id, lat, long) => {
+  const handleMarkerClick = (id, long, lat) => {
     setCurrentAttractionId(id);
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
@@ -86,8 +86,8 @@ function App() {
         {attractions.map((attraction) => (
           <React.Fragment key={attraction._id}>
             <Marker
-              latitude={attraction.x}
-              longitude={attraction.y}
+              latitude={attraction.y}
+              longitude={attraction.x}
               offsetLeft={-3.5 * viewport.zoom}
               offsetTop={-7 * viewport.zoom}
             >
@@ -105,8 +105,8 @@ function App() {
             {attraction._id === currentAttractionId && (
               <Popup
               key={attraction._id}
-              latitude={attraction.lat}
-              longitude={attraction.long}
+              latitude={attraction.y}
+              longitude={attraction.x}
               closeButton={true}
               closeOnClick={false}
               onClose={() => setCurrentAttractionId(null)}

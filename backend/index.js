@@ -1,16 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
-import {createAttraction, getAllAttractions, getAttraction, updateAttraction, deleteAttraction} from "./controllers/Attraction.js";
+import { createAttraction, deleteAttraction, getAllAttractions, getAttraction, updateAttraction } from "./controllers/attraction.js";
 import {createRating, getAllRatings, getRating, updateRating, deleteRating} from "./controllers/Rating.js";
 import {createTag, getAllTags, getTag, updateTag, deleteTag} from "./controllers/Tag.js";
 import { uploadImage, getImageById } from "./controllers/Image.js";
 import multer from "multer";
 import cors from "cors";
 import path from "path";
+
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use(express.json());
 const MONGO_URL = 'mongodb://localhost:27017/mongo-golang';
 mongoose.connect(MONGO_URL)   
  .then(() => console.log("MongoDB connected!"))

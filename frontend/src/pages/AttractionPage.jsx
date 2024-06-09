@@ -19,7 +19,7 @@ const AttractionPage = ({ attractionId }) => {
   }, [attractionId]);
   return (
     <div>
-        <SingleImage imageId={attraction.imageId}></SingleImage>
+      {attraction.imageId && <SingleImage imageId={attraction.imageId}></SingleImage>}
         <h1>Attraction Details</h1>
         <p>Name: {attraction.name}</p>
         <p>Address: {attraction.address}</p>

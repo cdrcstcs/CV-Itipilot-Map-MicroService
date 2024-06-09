@@ -8,6 +8,7 @@ export const ImageUploader = ({ onImageUpload }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        console.log(file);
         const reader = new FileReader();
         reader.onload = () => {
             setPreviewURL(reader.result);
@@ -20,7 +21,7 @@ export const ImageUploader = ({ onImageUpload }) => {
 
         const formData = new FormData();
         formData.append('file', selectedFile);
-        console.log(formData);
+        console.log(selectedFile);
         try {
             const response = await axios.post('http://localhost:4500/map_u', formData);
             if (response.data && response.data.image._id) {
