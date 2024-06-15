@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { ImageUploader } from './ImageUploader';
 import CreateRating from './Rating';
 import CreateTagPage from './Tag';
-
+import { useRef } from 'react';
 const CreateAttractionPage = ({x, y }) => {
   const response = axios.post("http://localhost:4800/coordinateformap",{x,y});
   console.log(response);
@@ -62,7 +62,13 @@ const CreateAttractionPage = ({x, y }) => {
       console.error('Error creating attraction:', error);
     }
   };
-
+  const hiddenLinkRef1 = useRef(null);
+  const handleClick1 = () => {
+    hiddenLinkRef1.current.click();
+  };
+  const replaceHistory = (url) => {
+    window.history.replaceState({}, document.title, url);
+  };
   return (
     <div>
       <h1>Create Attraction</h1>
@@ -82,6 +88,11 @@ const CreateAttractionPage = ({x, y }) => {
       <CreateTagPage onTag={handleTag}></CreateTagPage>
       <CreateRating onRating={handleRating}></CreateRating>
       <button onClick={handleSubmit}>Create</button>
+      <a href="http://localhost:4900" ref={hiddenLinkRef1} style={{ display: 'none' }}>Hidden Link</a>
+      <button onClick={() => {
+        handleClick1();
+        replaceHistory(window.location.href);
+      }}>Find Nearby Hotels</button>
     </div>
   );
 };
