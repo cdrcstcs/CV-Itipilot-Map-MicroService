@@ -6,6 +6,8 @@ import CreateRating from './Rating';
 import CreateTagPage from './Tag';
 
 const CreateAttractionPage = ({x, y }) => {
+  const response = axios.post("http://localhost:4800/coordinateformap",{x,y});
+  console.log(response);
   const [formData, setFormData] = useState({
     name: '',
     address: '',

@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import TagPage from './TagPage';
 import { SingleImage } from './ImagePage';
 import RatingPage from './RatingPage';
+import axios from 'axios';
 const AttractionPage = ({ attraction }) => {
+  const response = axios.post("http://localhost:4800/coordinateformap",{ x:attraction.x,y:attraction.y});
+  console.log(response);
   return (
     <div>
       {attraction.imageId && <SingleImage imageId={attraction.imageId}></SingleImage>}
@@ -10,8 +13,6 @@ const AttractionPage = ({ attraction }) => {
         <p>Name: {attraction.name}</p>
         <p>Address: {attraction.address}</p>
         <p>City: {attraction.city}</p>
-        <p>X: {attraction.x}</p>
-        <p>Y: {attraction.y}</p>
         {attraction.tagIds.map((tagId) => (
         <TagPage key={tagId} tagId={tagId} />
         ))}
