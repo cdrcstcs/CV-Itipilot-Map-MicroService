@@ -16,6 +16,33 @@ mongoose.connect(MONGO_URL)
  .then(() => console.log("MongoDB connected!"))
  .catch(err => console.log(err));
 
+
+ let data = null;
+ const getUserData = async (req, res) => {
+   try {
+     data = req.body.data;
+     console.log(data);
+       res.status(200).json("ok" );
+     } catch (err) {
+       console.log(err);
+       res.status(500).json("Failed to get userData!");
+     }
+ };
+ const getUserDataForClientSide = async (req, res) => {
+   try {
+     while (data === null) {
+       await new Promise(resolve => setTimeout(resolve, 10000)); 
+     }
+     console.log(data);
+     console.log("client");
+     res.status(200).json({ data });
+   } catch (err) {
+     console.error("Error awaiting data:", err);
+     res.status(500).json("Failed to get userData!");
+   }
+};
+app.post("/userData", getUserData);
+app.get("/userdataclient", getUserDataForClientSide);
 app.post('/map_a', createAttraction);
 app.get('/map_a', getAllAttractions);
 app.get('/map_a/:id', getAttraction);

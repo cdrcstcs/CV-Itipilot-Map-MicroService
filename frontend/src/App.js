@@ -5,8 +5,26 @@ import { Room } from "@material-ui/icons";
 import axios from "axios";
 import CreateAttractionPage from "./pages/Attraction";
 import AttractionPage from "./pages/AttractionPage";
-
+import { Avartar } from "./pages/avatarPage";
 function App() {
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4500/userdataclient");
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    if (userData === null) {
+      fetchUserData();
+    }
+  }, [userData]); 
+  if(!userData) {
+    return null
+  }
+
   const [lat_cur, setLatCur] = useState(null);
   const [long_cur, setLongCur] = useState(null);
   const [viewport, setViewport] = useState({
@@ -82,6 +100,16 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={handleAddClick}
       >
+        {userData && (
+          <Marker
+            latitude={lat_cur}
+            longitude={long_cur}
+            offsetLeft={-3.5 * viewport.zoom}
+            offsetTop={-7 * viewport.zoom}
+          >
+            <Avartar imageId={userData.imageId} />
+          </Marker>
+        )}
         {attractions.map((attraction) => (
           <React.Fragment key={attraction._id}>
             <Marker
