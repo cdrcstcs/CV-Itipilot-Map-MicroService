@@ -4,6 +4,7 @@ import { createAttraction, deleteAttraction, getAllAttractions, getAttraction, u
 import {createRating, getAllRatings, getRating, updateRating, deleteRating} from "./controllers/Rating.js";
 import {createTag, getAllTags, getTag, updateTag, deleteTag} from "./controllers/Tag.js";
 import { uploadImage, getImageById } from "./controllers/Image.js";
+import { getAllUsers, updateUser } from "./controllers/User.js";
 import multer from "multer";
 import cors from "cors";
 import path from "path";
@@ -43,6 +44,10 @@ mongoose.connect(MONGO_URL)
 };
 app.post("/userData", getUserData);
 app.get("/userdataclient", getUserDataForClientSide);
+
+app.get('/map_au',getAllUsers);
+app.put('/map_uu', updateUser);
+
 app.post('/map_a', createAttraction);
 app.get('/map_a', getAllAttractions);
 app.get('/map_a/:id', getAttraction);

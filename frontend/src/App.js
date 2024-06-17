@@ -18,6 +18,7 @@ function App() {
   const [attractions, setAttractions] = useState([]);
   const [currentAttractionId, setCurrentAttractionId] = useState(null);
   const [newAttraction, setNewAttraction] = useState(null);
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -84,6 +85,34 @@ function App() {
     fetchAttractions();
   }, []);
 
+  useEffect(() => {
+    const fetchUpdateUser = async () => {
+      try {
+        const response = await axios.put("http://localhost:4500/map_uu", [...userData.data,{longitude:long_cur,latitude:lat_cur}]);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUpdateUser();
+  }, []); 
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:4500/map_au");
+        const filteredUsers = response.data.filter(user => user.longtitude && user.latitude);
+        setUsers(filteredUsers);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchAllUsers();
+  }, []); 
+  
+  if (!userData){
+    return null
+  }
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <ReactMapGL
@@ -96,10 +125,11 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={handleAddClick}
       >
-        {userData && (
+        {users.map((user)=>{
+          <React.Fragment key={user._id}>
           <Marker
-            latitude={lat_cur}
-            longitude={long_cur}
+            latitude={user.latitude}
+            longitude={user.longtitude}
             offsetLeft={-3.5 * viewport.zoom}
             offsetTop={-7 * viewport.zoom}
           >
@@ -111,9 +141,10 @@ function App() {
                 }}
               >
               </Room>
-            <Avartar imageId={userData.data.imageId} />
+            <Avartar imageId={user.imageId} />
           </Marker>
-        )}
+          </React.Fragment>
+        })}
         {attractions.map((attraction) => (
           <React.Fragment key={attraction._id}>
             <Marker
