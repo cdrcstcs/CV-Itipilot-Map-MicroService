@@ -8,6 +8,16 @@ import AttractionPage from "./pages/AttractionPage";
 import { Avartar } from "./pages/avatarPage";
 function App() {
   const [userData, setUserData] = useState(null);
+  const [lat_cur, setLatCur] = useState(null);
+  const [long_cur, setLongCur] = useState(null);
+  const [viewport, setViewport] = useState({
+    latitude: 0,
+    longitude: 0,
+    zoom: 4,
+  });
+  const [attractions, setAttractions] = useState([]);
+  const [currentAttractionId, setCurrentAttractionId] = useState(null);
+  const [newAttraction, setNewAttraction] = useState(null);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -21,21 +31,7 @@ function App() {
       fetchUserData();
     }
   }, [userData]); 
-  if(!userData) {
-    return null
-  }
-
-  const [lat_cur, setLatCur] = useState(null);
-  const [long_cur, setLongCur] = useState(null);
-  const [viewport, setViewport] = useState({
-    latitude: 0,
-    longitude: 0,
-    zoom: 4,
-  });
-  const [attractions, setAttractions] = useState([]);
-  const [currentAttractionId, setCurrentAttractionId] = useState(null);
-  const [newAttraction, setNewAttraction] = useState(null);
-
+  console.log(userData);
   useEffect(() => {
     const findMyCoordinates = () => {
       if (navigator.geolocation) {
@@ -107,7 +103,15 @@ function App() {
             offsetLeft={-3.5 * viewport.zoom}
             offsetTop={-7 * viewport.zoom}
           >
-            <Avartar imageId={userData.imageId} />
+            <Room
+                style={{
+                  fontSize: 7 * viewport.zoom,
+                  color: "tomato",
+                  cursor: "pointer",
+                }}
+              >
+              </Room>
+            <Avartar imageId={userData.data.imageId} />
           </Marker>
         )}
         {attractions.map((attraction) => (

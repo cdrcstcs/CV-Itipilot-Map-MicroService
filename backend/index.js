@@ -10,7 +10,10 @@ import path from "path";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: true,
+}));
 const MONGO_URL = 'mongodb://localhost:27017/mongo-golang';
 mongoose.connect(MONGO_URL)   
  .then(() => console.log("MongoDB connected!"))
@@ -30,9 +33,6 @@ mongoose.connect(MONGO_URL)
  };
  const getUserDataForClientSide = async (req, res) => {
    try {
-     while (data === null) {
-       await new Promise(resolve => setTimeout(resolve, 10000)); 
-     }
      console.log(data);
      console.log("client");
      res.status(200).json({ data });
