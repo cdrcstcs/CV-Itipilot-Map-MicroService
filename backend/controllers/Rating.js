@@ -23,7 +23,6 @@ async function getAllRatings(req, res) {
 async function getRating(req, res) {
   try {
     const rating = await Rating.findById(req.params.id);
-    console.log(rating);
     if (!rating) return res.status(404).json({ message: 'Rating not found' });
     res.json(rating);
   } catch (error) {

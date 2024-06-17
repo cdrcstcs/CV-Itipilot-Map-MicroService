@@ -86,33 +86,27 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const fetchUpdateUser = async () => {
-      try {
-        const response = await axios.put("http://localhost:4500/map_uu", [...userData.data,{longitude:long_cur,latitude:lat_cur}]);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchUpdateUser();
-  }, []); 
-
-  useEffect(() => {
     const fetchAllUsers = async () => {
       try {
+        const ll = {longtitude : long_cur, latitude : lat_cur};
+        const response1 = await axios.post("http://localhost:4500/map_uu", {...userData.data,...ll});
+        // console.log(response1.data);
         const response = await axios.get("http://localhost:4500/map_au");
-        const filteredUsers = response.data.filter(user => user.longtitude && user.latitude);
-        setUsers(filteredUsers);
+        // console.log(response.data);
+        setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-    fetchAllUsers();
-  }, []); 
+    if(userData){
+      fetchAllUsers();
+    }
+  }, [userData]); 
   
   if (!userData){
     return null
   }
+  console.log(users);
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <ReactMapGL
@@ -125,7 +119,7 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={handleAddClick}
       >
-        {users.map((user)=>{
+        {users.map((user)=>(
           <React.Fragment key={user._id}>
           <Marker
             latitude={user.latitude}
@@ -142,9 +136,10 @@ function App() {
               >
               </Room>
             <Avartar imageId={user.imageId} />
+            <div style={{backgroundColor:'white',color:'black'}}>{user.name}</div>
           </Marker>
           </React.Fragment>
-        })}
+        ))}
         {attractions.map((attraction) => (
           <React.Fragment key={attraction._id}>
             <Marker

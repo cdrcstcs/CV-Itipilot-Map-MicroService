@@ -22,7 +22,6 @@ async function getAllTags(req, res) {
 async function getTag(req, res) {
   try {
     const tag = await Tag.findById(req.params.id);
-    console.log(tag);
     if (!tag) return res.status(404).json({ message: 'Tag not found' });
     res.json(tag);
   } catch (error) {

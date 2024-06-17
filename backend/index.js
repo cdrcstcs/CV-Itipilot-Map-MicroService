@@ -25,7 +25,6 @@ mongoose.connect(MONGO_URL)
  const getUserData = async (req, res) => {
    try {
      data = req.body.data;
-     console.log(data);
        res.status(200).json("ok" );
      } catch (err) {
        console.log(err);
@@ -34,8 +33,6 @@ mongoose.connect(MONGO_URL)
  };
  const getUserDataForClientSide = async (req, res) => {
    try {
-     console.log(data);
-     console.log("client");
      res.status(200).json({ data });
    } catch (err) {
      console.error("Error awaiting data:", err);
@@ -46,7 +43,7 @@ app.post("/userData", getUserData);
 app.get("/userdataclient", getUserDataForClientSide);
 
 app.get('/map_au',getAllUsers);
-app.put('/map_uu', updateUser);
+app.post('/map_uu', updateUser);
 
 app.post('/map_a', createAttraction);
 app.get('/map_a', getAllAttractions);
