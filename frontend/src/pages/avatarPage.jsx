@@ -5,7 +5,7 @@ export const Avartar = ({imageId}) => {
   const [image, setImage] = useState(null);
   const fetchImage = async () => {
       try {
-          const response = await axios.get(`http://localhost:4800/images/${imageId}`);
+          const response = await axios.get(`http://localhost:4500/map_i/${imageId}`);
           setImage(response.data.image);
         } catch (error) {
             console.error('Error fetching image:', error);

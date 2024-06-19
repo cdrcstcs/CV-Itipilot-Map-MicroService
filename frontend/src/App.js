@@ -6,8 +6,9 @@ import axios from "axios";
 import CreateAttractionPage from "./pages/Attraction";
 import AttractionPage from "./pages/AttractionPage";
 import { Avartar } from "./pages/avatarPage";
+import useUserData from "./userData";
+
 function App() {
-  const [userData, setUserData] = useState(null);
   const [lat_cur, setLatCur] = useState(null);
   const [long_cur, setLongCur] = useState(null);
   const [viewport, setViewport] = useState({
@@ -19,20 +20,8 @@ function App() {
   const [currentAttractionId, setCurrentAttractionId] = useState(null);
   const [newAttraction, setNewAttraction] = useState(null);
   const [users, setUsers] = useState([]);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4500/userdataclient");
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    if (userData === null) {
-      fetchUserData();
-    }
-  }, [userData]); 
-  console.log(userData);
+  const { loading, userDataFetch } = useUserData();
+
   useEffect(() => {
     const findMyCoordinates = () => {
       if (navigator.geolocation) {
@@ -49,6 +38,7 @@ function App() {
         alert("Geolocation is not supported by your browser");
       }
     };
+
     findMyCoordinates();
   }, []);
 
@@ -77,36 +67,43 @@ function App() {
     const fetchAttractions = async () => {
       try {
         const allAttractions = await axios.get("http://localhost:4500/map_a");
-        setAttractions(allAttractions.data); 
+        setAttractions(allAttractions.data);
       } catch (err) {
         console.log(err);
       }
     };
+
     fetchAttractions();
   }, []);
+
+  console.log(userDataFetch);
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const ll = {longtitude : long_cur, latitude : lat_cur};
-        const response1 = await axios.post("http://localhost:4500/map_uu", {...userData.data,...ll});
-        // console.log(response1.data);
+        const ll = { longtitude: long_cur, latitude: lat_cur };
+        const response1 = await axios.post("http://localhost:4500/map_uu", {
+          ...userDataFetch,
+          ...ll,
+        });
         const response = await axios.get("http://localhost:4500/map_au");
-        // console.log(response.data);
+        console.log(response.data);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-    if(userData){
+    if(long_cur && lat_cur){
       fetchAllUsers();
     }
-  }, [userData]); 
-  
-  if (!userData){
-    return null
+  }, [long_cur, lat_cur]);
+
+  if (loading) {
+    return null;
   }
+
   console.log(users);
+
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <ReactMapGL
@@ -119,25 +116,26 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={handleAddClick}
       >
-        {users.map((user)=>(
+        {users.map((user) => (
           <React.Fragment key={user._id}>
-          <Marker
-            latitude={user.latitude}
-            longitude={user.longtitude}
-            offsetLeft={-3.5 * viewport.zoom}
-            offsetTop={-7 * viewport.zoom}
-          >
-            <Room
+            <Marker
+              latitude={user.latitude}
+              longitude={user.longtitude}
+              offsetLeft={-3.5 * viewport.zoom}
+              offsetTop={-7 * viewport.zoom}
+            >
+              <Room
                 style={{
                   fontSize: 7 * viewport.zoom,
                   color: "tomato",
                   cursor: "pointer",
                 }}
-              >
-              </Room>
-            <Avartar imageId={user.imageId} />
-            <div style={{backgroundColor:'white',color:'black'}}>{user.name}</div>
-          </Marker>
+              />
+              <Avartar imageId={user.imageId} />
+              <div style={{ backgroundColor: "white", color: "black",borderRadius:'50%' }}>
+                {user.name}
+              </div>
+            </Marker>
           </React.Fragment>
         ))}
         {attractions.map((attraction) => (
@@ -161,17 +159,15 @@ function App() {
             </Marker>
             {attraction._id === currentAttractionId && (
               <Popup
-              key={attraction._id}
-              latitude={attraction.y}
-              longitude={attraction.x}
-              closeButton={true}
-              closeOnClick={false}
-              onClose={() => setCurrentAttractionId(null)}
-              anchor="left"
-            >
-                <AttractionPage
-                  attraction={attraction}
-                ></AttractionPage>
+                key={attraction._id}
+                latitude={attraction.y}
+                longitude={attraction.x}
+                closeButton={true}
+                closeOnClick={false}
+                onClose={() => setCurrentAttractionId(null)}
+                anchor="left"
+              >
+                <AttractionPage attraction={attraction} />
               </Popup>
             )}
           </React.Fragment>
@@ -200,10 +196,10 @@ function App() {
               onClose={() => setNewAttraction(null)}
               anchor="left"
             >
-            <CreateAttractionPage
-              x={newAttraction.long}
-              y={newAttraction.lat}
-            ></CreateAttractionPage>
+              <CreateAttractionPage
+                x={newAttraction.long}
+                y={newAttraction.lat}
+              />
             </Popup>
           </>
         )}
