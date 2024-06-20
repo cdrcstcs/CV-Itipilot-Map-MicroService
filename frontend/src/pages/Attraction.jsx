@@ -5,9 +5,10 @@ import { ImageUploader } from './ImageUploader';
 import CreateRating from './Rating';
 import CreateTagPage from './Tag';
 import { useRef } from 'react';
+import { cookie } from '../cookies';
 const CreateAttractionPage = ({x, y }) => {
-  const response = axios.post("http://localhost:4800/coordinateformap",{x,y});
-  console.log(response);
+  cookie.set('x', String(x), { path: '/' });
+  cookie.set('y', String(y), { path: '/' });
   const [formData, setFormData] = useState({
     name: '',
     address: '',
