@@ -7,8 +7,10 @@ import CreateAttractionPage from "./pages/Attraction";
 import AttractionPage from "./pages/AttractionPage";
 import { Avartar } from "./pages/avatarPage";
 import useUserData from "./userData";
+import { useLocation } from 'react-router-dom';
 
 function App() {
+  const location = useLocation();
   const [lat_cur, setLatCur] = useState(null);
   const [long_cur, setLongCur] = useState(null);
   const [viewport, setViewport] = useState({
@@ -22,6 +24,31 @@ function App() {
   const [users, setUsers] = useState([]);
   const { loading, userDataFetch } = useUserData();
 
+  const parseCoordinatesFromPath = (path) => {
+    const regex = /\/(-?\d+\.\d+)\/(-?\d+\.\d+)/;
+    const match = path.match(regex);
+    if (match && match.length === 3) {
+      const latitude = parseFloat(match[1]);
+      const longitude = parseFloat(match[2]);
+      return { latitude, longitude };
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    // Parse coordinates from the current location path
+    const { pathname } = location;
+    const parsedCoordinates = parseCoordinatesFromPath(pathname);
+
+    if (parsedCoordinates) {
+      const { latitude, longitude } = parsedCoordinates;
+      setViewport((prevViewport) => ({
+        ...prevViewport,
+        latitude,
+        longitude,
+      }));
+    }
+  }, [location.pathname]);
   useEffect(() => {
     const findMyCoordinates = () => {
       if (navigator.geolocation) {
