@@ -2,12 +2,13 @@ import React from 'react';
 import TagPage from './TagPage';
 import { SingleImage } from './ImagePage';
 import RatingPage from './RatingPage';
-import axios from 'axios';
 import { useRef } from 'react';
+import { cookie } from '../cookies';
 const AttractionPage = ({ attraction }) => {
-  const response = axios.post("http://localhost:4800/coordinateformap",{ x:attraction.x,y:attraction.y});
-  console.log(response);
+  cookie.set('x', String(attraction.x), { path: '/' });
+  cookie.set('y', String(attraction.y), { path: '/' });
   const hiddenLinkRef1 = useRef(null);
+
   const handleClick1 = () => {
     hiddenLinkRef1.current.click();
   };
@@ -29,7 +30,8 @@ const AttractionPage = ({ attraction }) => {
         <button onClick={() => {
           handleClick1();
           replaceHistory(window.location.href);
-        }}>Find Nearby Hotels</button>
+        }}>Filter Hotels</button>
+
     </div>
   );
 };

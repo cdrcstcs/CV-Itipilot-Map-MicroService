@@ -72,7 +72,7 @@ const CreateAttractionPage = ({x, y }) => {
   };
   return (
     <div>
-      <h1>Create Attraction</h1>
+      <h1>Create Attraction or Create Hotel</h1>
       <div>
         <label>Name:</label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -88,12 +88,12 @@ const CreateAttractionPage = ({x, y }) => {
       <ImageUploader onImageUpload={handleImageUpload} />
       <CreateTagPage onTag={handleTag}></CreateTagPage>
       <CreateRating onRating={handleRating}></CreateRating>
-      <button onClick={handleSubmit}>Create</button>
-      <a href="http://localhost:4900" ref={hiddenLinkRef1} style={{ display: 'none' }}>Hidden Link</a>
-      <button onClick={() => {
-        handleClick1();
-        replaceHistory(window.location.href);
-      }}>Find Nearby Hotels</button>
+      <button onClick={handleSubmit}>Create Attraction</button>
+      <a href="http://localhost:4900/add" ref={hiddenLinkRef1} style={{ display: 'none' }}>Hidden Link</a>
+        <button onClick={() => {
+          handleClick1();
+          replaceHistory(window.location.href);
+        }}>Create Hotel</button>
     </div>
   );
 };

@@ -5,12 +5,10 @@ import { Room } from "@material-ui/icons";
 import axios from "axios";
 import CreateAttractionPage from "./pages/Attraction";
 import AttractionPage from "./pages/AttractionPage";
-import { Avartar } from "./pages/avatarPage";
 import useUserData from "./userData";
-import { useLocation } from 'react-router-dom';
+import { Avartar } from "./pages/AvartarPage";
 
 function App() {
-  const location = useLocation();
   const [lat_cur, setLatCur] = useState(null);
   const [long_cur, setLongCur] = useState(null);
   const [viewport, setViewport] = useState({
@@ -21,34 +19,10 @@ function App() {
   const [attractions, setAttractions] = useState([]);
   const [currentAttractionId, setCurrentAttractionId] = useState(null);
   const [newAttraction, setNewAttraction] = useState(null);
-  const [users, setUsers] = useState([]);
   const { loading, userDataFetch } = useUserData();
+  const [groupedUsers, setGroupedUsers] = useState([]);
+  const [expandedGroup, setExpandedGroup] = useState(null);
 
-  const parseCoordinatesFromPath = (path) => {
-    const regex = /\/(-?\d+\.\d+)\/(-?\d+\.\d+)/;
-    const match = path.match(regex);
-    if (match && match.length === 3) {
-      const latitude = parseFloat(match[1]);
-      const longitude = parseFloat(match[2]);
-      return { latitude, longitude };
-    }
-    return null;
-  };
-
-  useEffect(() => {
-    // Parse coordinates from the current location path
-    const { pathname } = location;
-    const parsedCoordinates = parseCoordinatesFromPath(pathname);
-
-    if (parsedCoordinates) {
-      const { latitude, longitude } = parsedCoordinates;
-      setViewport((prevViewport) => ({
-        ...prevViewport,
-        latitude,
-        longitude,
-      }));
-    }
-  }, [location.pathname]);
   useEffect(() => {
     const findMyCoordinates = () => {
       if (navigator.geolocation) {
@@ -103,8 +77,6 @@ function App() {
     fetchAttractions();
   }, []);
 
-  console.log(userDataFetch);
-
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
@@ -113,14 +85,30 @@ function App() {
           ...userDataFetch,
           ...ll,
         });
+        console.log(response1.data);
         const response = await axios.get("http://localhost:4500/map_au");
-        console.log(response.data);
-        setUsers(response.data);
+        const allUsers = response.data;
+
+        // Group users by their coordinates
+        const grouped = {};
+        allUsers.forEach((user) => {
+          const key = `${user.latitude.toFixed(6)}_${user.longtitude.toFixed(
+            6
+          )}`;
+          if (grouped[key]) {
+            grouped[key].push(user);
+          } else {
+            grouped[key] = [user];
+          }
+        });
+
+        setGroupedUsers(Object.values(grouped));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-    if(long_cur && lat_cur){
+
+    if (long_cur && lat_cur) {
       fetchAllUsers();
     }
   }, [long_cur, lat_cur]);
@@ -128,8 +116,6 @@ function App() {
   if (loading) {
     return null;
   }
-
-  console.log(users);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -143,27 +129,23 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={handleAddClick}
       >
-        {users.map((user) => (
-          <React.Fragment key={user._id}>
-            <Marker
-              latitude={user.latitude}
-              longitude={user.longtitude}
-              offsetLeft={-3.5 * viewport.zoom}
-              offsetTop={-7 * viewport.zoom}
-            >
-              <Room
-                style={{
-                  fontSize: 7 * viewport.zoom,
-                  color: "tomato",
-                  cursor: "pointer",
-                }}
-              />
-              <Avartar imageId={user.imageId} />
-              <div style={{ backgroundColor: "white", color: "black",borderRadius:'50%' }}>
-                {user.name}
-              </div>
-            </Marker>
-          </React.Fragment>
+        {groupedUsers.map((group, index) => (
+          <Marker
+            key={index}
+            latitude={group[0].latitude}
+            longitude={group[0].longtitude}
+            offsetLeft={-3.5 * viewport.zoom}
+            offsetTop={-7 * viewport.zoom}
+            onClick={() => setExpandedGroup(index)}
+          >
+            <Room
+              style={{
+                fontSize: 7 * viewport.zoom,
+                color: "blue", // Change color for group marker
+                cursor: "pointer",
+              }}
+            />
+          </Marker>
         ))}
         {attractions.map((attraction) => (
           <React.Fragment key={attraction._id}>
@@ -231,6 +213,18 @@ function App() {
           </>
         )}
       </ReactMapGL>
+
+      {expandedGroup !== null && (
+        <div className="sidebar">
+          <h3>Users at this location:</h3>
+          {groupedUsers[expandedGroup].map((user) => (
+            <div key={user._id} className="user-item">
+              <Avartar imageId={user.imageId} />
+              <div>{user.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

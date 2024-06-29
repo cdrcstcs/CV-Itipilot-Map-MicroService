@@ -87,16 +87,32 @@ textarea {
 .button:focus{
   outline: none;
 }
-
-.logout{
-  background-color: tomato;
+.sidebar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 250px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  z-index: 1;
+  border-radius: 10px;
 }
 
-.login{
-  background-color: teal;
-  margin-right: 10px;
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px;
+  cursor: pointer;
 }
 
-.register{
-  background-color: slateblue;
+.user-item:hover {
+  background-color: #f0f0f0;
+}
+
+.user-item div {
+  flex-grow: 1;
 }

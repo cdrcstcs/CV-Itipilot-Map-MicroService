@@ -9,7 +9,7 @@ export async function getAllUsers(req, res) {
 }
 export async function updateUser(req, res) {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { _id, ...updateData } = req.body;
     const user = await User.findByIdAndUpdate(_id, updateData, { new: true });
     if (!user) {
