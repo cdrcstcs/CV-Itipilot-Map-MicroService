@@ -22,10 +22,10 @@ export async function updateUser(req, res) {
 }
 export async function getUser(req, res) {
 	try {
-    console.log('hello from backend');
-    console.log(req.params.id);
-	  const user = await User.findById(req.params.id);
-    console.log(user);
+    // console.log('hello from backend');
+    // console.log(req.params.id);
+	  const user = await User.findOne();
+    // console.log(user);
 	  if (!user) return res.status(404).json({ message: 'User not found' });
 	  res.json(user);
 	} catch (error) {

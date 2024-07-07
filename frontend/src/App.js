@@ -1,5 +1,5 @@
 import "./app.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";// eslint-disable-line no-unused-vars
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { Room } from "@material-ui/icons";
 import axios from "axios";
@@ -39,10 +39,8 @@ function App() {
         alert("Geolocation is not supported by your browser");
       }
     };
-
     findMyCoordinates();
   }, []);
-
   useEffect(() => {
     setViewport((prevViewport) => ({
       ...prevViewport,
@@ -50,12 +48,10 @@ function App() {
       longitude: long_cur || 0,
     }));
   }, [lat_cur, long_cur]);
-
   const handleMarkerClick = (id, long, lat) => {
     setCurrentAttractionId(id);
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
-
   const handleAddClick = (e) => {
     const [longitude, latitude] = e.lngLat;
     setNewAttraction({
@@ -63,7 +59,6 @@ function App() {
       long: longitude,
     });
   };
-
   useEffect(() => {
     const fetchAttractions = async () => {
       try {
@@ -73,14 +68,13 @@ function App() {
         console.log(err);
       }
     };
-
     fetchAttractions();
   }, []);
-
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
         const ll = { longtitude: long_cur, latitude: lat_cur };
+        console.log(ll);
         const response1 = await axios.post("http://localhost:4500/map_uu", {
           ...userDataFetch,
           ...ll,
@@ -101,22 +95,18 @@ function App() {
             grouped[key] = [user];
           }
         });
-
         setGroupedUsers(Object.values(grouped));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-
     if (long_cur && lat_cur) {
       fetchAllUsers();
     }
   }, [long_cur, lat_cur]);
-
   if (loading) {
     return null;
   }
-
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <ReactMapGL

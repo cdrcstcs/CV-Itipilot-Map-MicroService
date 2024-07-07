@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';// eslint-disable-line no-unused-vars
 import axios from 'axios';
 
 function RatingPage({ ratingId }) {
@@ -29,12 +29,22 @@ function RatingPage({ ratingId }) {
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center h-9">
       {rating && (
-        <React.Fragment>
-          <p>Score: {rating.score}</p>
-          <button onClick={handleLike} disabled={isLiked}>Like</button>
-        </React.Fragment>
+        <div className="bg-white w-full flex items-center flex-col justify-center rounded-lg shadow-lg">
+          <p className="text-gray-700 font-medium mb-4">Score: {rating.score}</p>
+          <button
+            onClick={handleLike}
+            disabled={isLiked}
+            className={`px-4 py-2 rounded-md font-medium transition-colors duration-300 ${
+              isLiked
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
+          >
+            Like
+          </button>
+        </div>
       )}
     </div>
   );

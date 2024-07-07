@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';// eslint-disable-line no-unused-vars
 import axios from 'axios';
 export const SingleImage = ({imageId}) => {
   const [image, setImage] = useState(null);
@@ -18,8 +18,12 @@ export const SingleImage = ({imageId}) => {
   };
 
   return (
-    <div>
-        <img src={`http://localhost:4500/${image}`} alt={image} />
+    <div className="flex justify-center items-center h-32">
+      <img
+        src={`http://localhost:4500/${image}`}
+        alt={image}
+        className="max-w-full max-h-full object-contain"
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';// eslint-disable-line no-unused-vars
 import axios from 'axios';
 export const Avartar = ({imageId}) => {
   console.log(imageId);
@@ -14,15 +14,19 @@ export const Avartar = ({imageId}) => {
 useEffect(() => {
     fetchImage();
 }, []);
-  return (
-    <div>
-      {image ? (
-        <div>
-          <img src={`http://localhost:4000/${image}`} alt={image} style={{width:'30px', height:'30px', borderRadius:'50%'}}/>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
-  );
+return (
+  <div>
+    {image ? (
+      <div>
+        <img
+          src={`http://localhost:4500/${image}`}
+          alt={image}
+          className="w-8 h-8 rounded-full"
+        />
+      </div>
+    ) : (
+      <p className="text-gray-500">Loading...</p>
+    )}
+  </div>
+);
 };

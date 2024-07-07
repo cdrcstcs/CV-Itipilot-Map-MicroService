@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';// eslint-disable-line no-unused-vars
 import axios from 'axios';
 
 function TagPage({ tagId }) {
@@ -18,7 +18,9 @@ function TagPage({ tagId }) {
   }, [tagId]); // Run the effect whenever tagId changes
 
   return (
-    <p>Value: {tag ? tag.value : 'Loading...'}</p>
+    <p className="text-gray-700 font-medium">
+      Value: {tag ? tag.value : 'Loading...'}
+    </p>
   );
 }
 

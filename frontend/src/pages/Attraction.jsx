@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
 import axios from 'axios';
 import { useEffect } from 'react';
 import { ImageUploader } from './ImageUploader';
 import CreateRating from './Rating';
 import CreateTagPage from './Tag';
 import { useRef } from 'react';
-import { cookie } from '../cookies';
+// import { cookie } from '../cookies';
 const CreateAttractionPage = ({x, y }) => {
-  cookie.set('x', String(x), { path: '/' });
-  cookie.set('y', String(y), { path: '/' });
+  // cookie.set('x', String(x), { path: '/' });
+  // cookie.set('y', String(y), { path: '/' });
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -71,29 +71,70 @@ const CreateAttractionPage = ({x, y }) => {
     window.history.replaceState({}, document.title, url);
   };
   return (
-    <div>
-      <h1>Create Attraction or Create Hotel</h1>
-      <div>
-        <label>Name:</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+    <div className=" max-h-96 overflow-y-auto py-10">
+      <div className="w-96 mx-auto  bg-white rounded-lg shadow-md p-8">
+        <h1 className="font-bold mb-6">Create Attraction or Create Hotel</h1>
+        <div className="mb-6">
+          <label className=" block font-medium mb-2">Name:</label>
+          <input
+            className="w-full  border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:ring-blue-500"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <label className=" block font-medium  mb-2">Address:</label>
+          <input
+            className="w-full  border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:ring-blue-500"
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block font-medium mb-2">City:</label>
+          <input
+            className="w-full  border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:ring-blue-500"
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <ImageUploader onImageUpload={handleImageUpload} />
+        <CreateTagPage onTag={handleTag} />
+        <CreateRating onRating={handleRating} />
+        <div className="flex justify-between">
+          <button
+            className="bg-blue-500  hover:bg-blue-600 font-medium py-2 px-4 rounded-md"
+            onClick={handleSubmit}
+          >
+            Create Attraction
+          </button>
+          <a
+            href="http://localhost:4900/add"
+            ref={hiddenLinkRef1}
+            className="hidden"
+          >
+            Hidden Link
+          </a>
+          <button
+            className="bg-gray-500  hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md"
+            onClick={() => {
+              handleClick1();
+              replaceHistory(window.location.href);
+            }}
+          >
+            Create Hotel
+          </button>
+        </div>
       </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" name="address" value={formData.address} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>City:</label>
-        <input type="text" name="city" value={formData.city} onChange={handleChange} required />
-      </div>
-      <ImageUploader onImageUpload={handleImageUpload} />
-      <CreateTagPage onTag={handleTag}></CreateTagPage>
-      <CreateRating onRating={handleRating}></CreateRating>
-      <button onClick={handleSubmit}>Create Attraction</button>
-      <a href="http://localhost:4900/add" ref={hiddenLinkRef1} style={{ display: 'none' }}>Hidden Link</a>
-        <button onClick={() => {
-          handleClick1();
-          replaceHistory(window.location.href);
-        }}>Create Hotel</button>
     </div>
   );
 };

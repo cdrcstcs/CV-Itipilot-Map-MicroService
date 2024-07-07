@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react';// eslint-disable-line no-unused-vars
 import axios from 'axios';
 
 export const ImageUploader = ({ onImageUpload }) => {
@@ -38,10 +38,29 @@ export const ImageUploader = ({ onImageUpload }) => {
     };
 
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
-            {previewURL && <img src={previewURL} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px', marginBottom: '10px' }} />}
-            <button onClick={handleUpload}>Upload</button>
+        <div className="flex flex-col items-center justify-center ">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+            />
+            {previewURL && (
+              <div className="mb-4">
+                <img
+                  src={previewURL}
+                  alt="Preview"
+                  className="max-w-full h-16 object-contain"
+                />
+              </div>
+            )}
+            <button
+              onClick={handleUpload}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+            >
+              Upload
+            </button>
+          </div>
         </div>
-    );
+      );
 };
