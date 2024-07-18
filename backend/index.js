@@ -13,6 +13,7 @@ import Tag from "./models/Tag.js";
 import Rating from "./models/Rating.js";
 import User from "./models/User.js";
 import Attraction from "./models/Attraction.js";
+import 'dotenv/config';
 import { generateImageData,generateTags, generateRatings, generateUsers, generateAttractions } from "./data.js";
 // import  jwt  from "jsonwebtoken";
 const app = express();
@@ -20,28 +21,6 @@ app.use(express.json());
 app.use(cors({
   origin: true,
 }));
-const MONGO_URL = 'mongodb://localhost:27017/mongo-golang';
-// mongoose.connect(MONGO_URL)   
-//  .then(() => console.log("MongoDB connected!"))
-//  .catch(err => console.log(err));
-
-// const jwtSecret = 'fasefraw4r5r3wq45wdfgw34twdfg';
-// async function verifyToken(req, res) {
-//     try {
-//       console.log(req.body.token);
-//         const token = req.body.token; // Extract token from request body
-//         jwt.verify(token, jwtSecret, {}, (err, userData) => {
-//             if (err) {
-//                 throw err; // Throw error if verification fails
-//             } else {
-//                 res.status(200).json(userData); // Send user data if verification succeeds
-//             }
-//         });
-//     } catch (err) {
-//         res.status(401).send(err.message); // Handle authentication failure
-//     }
-// }
-// app.post('/verify', verifyToken);
 app.get('/map_au',getAllUsers);
 app.post('/map_uu', updateUser);
 
@@ -77,10 +56,8 @@ const upload = multer({ storage });
 app.post('/map_u', upload.single('file'), uploadImage);
 app.get('/map_i/:id', getImageById);
 
-// app.listen(4500, () => {
-//   console.log("Backend server is running!");
-// });
-mongoose.connect(MONGO_URL).then(async () => {
+
+mongoose.connect(process.env.MONGO_URL).then(async () => {
   await Image.deleteMany();
   await User.deleteMany();
   await Tag.deleteMany();
@@ -91,5 +68,5 @@ mongoose.connect(MONGO_URL).then(async () => {
   await Tag.insertMany(generateTags());
   await Rating.insertMany(generateRatings());
   await Attraction.insertMany(await generateAttractions());
-  app.listen(4500, () => console.log(`Server running on PORT: ${4500}`));
+  app.listen(process.env.PORT, () => console.log(`Server running on PORT: ${process.env.PORT}`));
 }).catch((error) => console.log(`${error} did not connect`));
